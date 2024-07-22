@@ -48,6 +48,7 @@ class ROSBluerov2Interface(Node):
         if request.data:
             self.mavlink.arducopter_arm()
         else:
+            self._set_neutral_all_channels()
             self.mavlink.arducopter_disarm()
         response.success = True
         response.message = "Arming: %s" % request.data
@@ -57,6 +58,7 @@ class ROSBluerov2Interface(Node):
         """
         Disarm the vehicle before shutting down the node
         """
+        self._set_neutral_all_channels()
         self.mavlink.arducopter_disarm()
         self.mavlink.close()
         super().destroy_node()
@@ -89,6 +91,15 @@ class ROSBluerov2Interface(Node):
             msg.channels[5],
             msg.channels[6],
             msg.channels[7],
+        )
+
+    def _set_neutral_all_channels(self):
+        """
+        Set all channels to neutral values
+        """
+        neutral_values = [1500] * 8
+        self.mavlink.mav.rc_channels_override_send(
+            self.mavlink.target_system, self.mavlink.target_component, *neutral_values
         )
 
 
