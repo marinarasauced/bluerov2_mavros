@@ -76,8 +76,10 @@ class ROSBluerov2Interface(Node):
     def override_rc_callback(self, msg):
         """
         Callback for the /bluerov2/override_rc subscriber
+
+        See https://www.ardusub.com/developers/rc-input-and-output.html#rc-input
         """
-        if len(msg.channels) < 8:
+        if len(msg.channels) < 11:
             self.get_logger().warn("Received message with less than 8 channels")
             return
         self.mavlink.mav.rc_channels_override_send(
@@ -91,6 +93,9 @@ class ROSBluerov2Interface(Node):
             msg.channels[5],
             msg.channels[6],
             msg.channels[7],
+            msg.channels[8],
+            msg.channels[9],
+            msg.channels[10],
         )
 
     def _set_neutral_all_channels(self):
