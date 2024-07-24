@@ -16,8 +16,7 @@ class ROSBluerov2Interface(Node):
         self.mavlink = mavutil.mavlink_connection(self.udp_params)
         self.mavlink.wait_heartbeat()
         self.get_logger().info(
-            "Heartbeat from system %u, component %u"
-            % (self.mavlink.target_system, self.mavlink.target_component)
+            f"Heartbeat from system {self.mavlink.target_system}, component {self.mavlink.target_component}"
         )
 
         # Send heartbeat every 0.1 seconds
@@ -51,7 +50,7 @@ class ROSBluerov2Interface(Node):
             self._set_neutral_all_channels()
             self.mavlink.arducopter_disarm()
         response.success = True
-        response.message = "Arming: %s" % request.data
+        response.message = f"Arming: {request.data}"
         return response
 
     def destroy_node(self):
@@ -71,7 +70,7 @@ class ROSBluerov2Interface(Node):
             msg = self.mavlink.recv_msg()
             if msg is None:
                 break
-            self.get_logger().debug("Received message: %s" % msg)
+            self.get_logger().debug(f"Received message: {msg}")
 
     def override_rc_callback(self, msg):
         """
