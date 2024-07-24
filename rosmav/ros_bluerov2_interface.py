@@ -146,6 +146,8 @@ class ROSBluerov2Interface(Node):
     def manual_control_callback(self, msg):
         """
         Send manual control message
+
+        See https://mavlink.io/en/messages/common.html#MANUAL_CONTROL
         """
         self.mavlink.mav.manual_control_send(
             self.mavlink.target_system,
