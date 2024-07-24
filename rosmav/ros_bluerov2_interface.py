@@ -4,7 +4,7 @@ import rclpy
 from rclpy.node import Node
 from std_srvs.srv import SetBool
 from pymavlink import mavutil
-from mavros_msgs.msg import OverrideRCIn
+from mavros_msgs.msg import OverrideRCIn, ManualControl
 from sensor_msgs.msg import (
     FluidPressure as Pressure,
     Temperature,
@@ -45,6 +45,11 @@ class ROSBluerov2Interface(Node):
         # Create a publisher for the temperature message
         self.temperature_pub = self.create_publisher(
             Temperature, "bluerov2/temperature", 10
+        )
+
+        # Create a subscriber to listen to the /bluerov2/manual_control topic
+        self.manual_control_sub = self.create_subscription(
+            ManualControl, "bluerov2/manual_control", self.manual_control_callback, 10
         )
 
     def send_heartbeat(self):
@@ -137,6 +142,19 @@ class ROSBluerov2Interface(Node):
             msg.temperature / 100.0
         )  # Convert to degrees Celsius
         self.temperature_pub.publish(temperature_msg)
+
+    def manual_control_callback(self, msg):
+        """
+        Send manual control message
+        """
+        self.mavlink.mav.manual_control_send(
+            self.mavlink.target_system,
+            int(msg.x * 10),
+            int(msg.y * 10),
+            int(msg.z * 10),
+            int(msg.r * 10),
+            int(msg.buttons),
+        )
 
 
 def main(args=None):
