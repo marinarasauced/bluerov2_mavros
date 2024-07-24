@@ -15,6 +15,7 @@
   <depend>mavlink</depend>
   <depend>rclpy</depend>
   <depend>mavros_msgs</depend>
+  <depend>sensor_msgs</depend>
   <depend>std_srvs</depend>
 
 

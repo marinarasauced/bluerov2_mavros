@@ -5,6 +5,10 @@ from rclpy.node import Node
 from std_srvs.srv import SetBool
 from pymavlink import mavutil
 from mavros_msgs.msg import OverrideRCIn
+from sensor_msgs.msg import (
+    FluidPressure as Pressure,
+    Temperature,
+)
 
 
 class ROSBluerov2Interface(Node):
@@ -33,6 +37,14 @@ class ROSBluerov2Interface(Node):
         # Create a subscriber to listen to the /bluerov2/override_rc topic
         self.override_rc_sub = self.create_subscription(
             OverrideRCIn, "bluerov2/override_rc", self.override_rc_callback, 10
+        )
+
+        # Create a publisher for the pressure message
+        self.pressure_pub = self.create_publisher(Pressure, "bluerov2/pressure", 10)
+
+        # Create a publisher for the temperature message
+        self.temperature_pub = self.create_publisher(
+            Temperature, "bluerov2/temperature", 10
         )
 
     def send_heartbeat(self):
@@ -71,6 +83,8 @@ class ROSBluerov2Interface(Node):
             if msg is None:
                 break
             self.get_logger().debug(f"Received message: {msg}")
+            if msg.get_type() == "SCALED_PRESSURE2":
+                self._handle_pressure(msg)
 
     def override_rc_callback(self, msg):
         """
@@ -105,6 +119,24 @@ class ROSBluerov2Interface(Node):
         self.mavlink.mav.rc_channels_override_send(
             self.mavlink.target_system, self.mavlink.target_component, *neutral_values
         )
+
+    def _handle_pressure(self, msg):
+        """
+        Handle the pressure message
+        """
+        self.get_logger().debug(f"Pressure: {msg.press_abs}, {msg.press_diff}")
+
+        pressure_msg = Pressure()
+        pressure_msg.header.stamp = self.get_clock().now().to_msg()
+        pressure_msg.fluid_pressure = msg.press_abs * 100.0  # Convert to Pa
+        self.pressure_pub.publish(pressure_msg)
+
+        temperature_msg = Temperature()
+        temperature_msg.header.stamp = self.get_clock().now().to_msg()
+        temperature_msg.temperature = (
+            msg.temperature / 100.0
+        )  # Convert to degrees Celsius
+        self.temperature_pub.publish(temperature_msg)
 
 
 def main(args=None):
