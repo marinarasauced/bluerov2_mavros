@@ -8,6 +8,8 @@ from mavros_msgs.msg import OverrideRCIn, ManualControl
 from sensor_msgs.msg import (
     FluidPressure as Pressure,
     Temperature,
+    MagneticField,
+    Imu,
 )
 
 
@@ -46,6 +48,14 @@ class ROSBluerov2Interface(Node):
         self.temperature_pub = self.create_publisher(
             Temperature, "bluerov2/temperature", 10
         )
+
+        # Create a publisher for the magnetic field message
+        self.magnetic_field_pub = self.create_publisher(
+            MagneticField, "bluerov2/magnetic_field", 10
+        )
+
+        # Create a publisher for the IMU message
+        self.imu_pub = self.create_publisher(Imu, "bluerov2/imu", 10)
 
         # Create a subscriber to listen to the /bluerov2/manual_control topic
         self.manual_control_sub = self.create_subscription(
@@ -90,6 +100,10 @@ class ROSBluerov2Interface(Node):
             self.get_logger().debug(f"Received message: {msg}")
             if msg.get_type() == "SCALED_PRESSURE2":
                 self._handle_pressure(msg)
+            elif msg.get_type() == "SCALED_IMU2":
+                self._handle_imu(msg)
+            elif msg.get_type() == "VFR_HUD":
+                self._handle_vfr_hud(msg)
 
     def override_rc_callback(self, msg):
         """
@@ -142,6 +156,45 @@ class ROSBluerov2Interface(Node):
             msg.temperature / 100.0
         )  # Convert to degrees Celsius
         self.temperature_pub.publish(temperature_msg)
+
+    def _handle_imu(self, msg):
+        """
+        Handle the IMU message
+        """
+        self.get_logger().debug(
+            f"IMU: {msg.xacc}, {msg.yacc}, {msg.zacc}, {msg.xgyro}, {msg.ygyro}, {msg.zgyro}, {msg.xmag}, {msg.ymag}, {msg.zmag}"
+        )
+
+        magnetic_field_msg = MagneticField()
+        magnetic_field_msg.header.stamp = self.get_clock().now().to_msg()
+        # magnetic field is in mgauss, convert to Tesla
+        magnetic_field_msg.magnetic_field.x = msg.xmag * 1e-7
+        magnetic_field_msg.magnetic_field.y = msg.ymag * 1e-7
+        magnetic_field_msg.magnetic_field.z = msg.zmag * 1e-7
+        self.magnetic_field_pub.publish(magnetic_field_msg)
+
+        imu_msg = Imu()
+        imu_msg.header.stamp = self.get_clock().now().to_msg()
+        # acceleration is in mG, convert to m/s^2
+        imu_msg.linear_acceleration.x = msg.xacc * 9.81 * 1e-3
+        imu_msg.linear_acceleration.y = msg.yacc * 9.81 * 1e-3
+        imu_msg.linear_acceleration.z = msg.zacc * 9.81 * 1e-3
+        # gyroscope is in mrad/s, convert to rad/s
+        imu_msg.angular_velocity.x = msg.xgyro * 1e-3
+        imu_msg.angular_velocity.y = msg.ygyro * 1e-3
+        imu_msg.angular_velocity.z = msg.zgyro * 1e-3
+        self.imu_pub.publish(imu_msg)
+
+    def _handle_vfr_hud(self, msg):
+        """
+        Handle the VFR HUD message
+        """
+        self.get_logger().debug(
+            f"VFR HUD: {msg.airspeed}, {msg.groundspeed}, {msg.heading}, {msg.throttle}, {msg.alt}"
+        )
+
+        # TODO: Implement
+        pass
 
     def manual_control_callback(self, msg):
         """
