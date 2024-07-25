@@ -149,11 +149,13 @@ class ROSBluerov2Interface(Node):
 
         See https://mavlink.io/en/messages/common.html#MANUAL_CONTROL
         """
+        # msg.z is between -100 and 100, but the MAVLink message expects a value between 0 and 1000
+
         self.mavlink.mav.manual_control_send(
             self.mavlink.target_system,
             int(msg.x * 10),
             int(msg.y * 10),
-            int(msg.z * 10),
+            int((msg.z * 10) / 2 + 500),
             int(msg.r * 10),
             int(msg.buttons),
         )
