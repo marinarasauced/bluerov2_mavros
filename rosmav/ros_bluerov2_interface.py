@@ -5,6 +5,7 @@ from rclpy.node import Node
 from std_srvs.srv import SetBool
 from pymavlink import mavutil
 from mavros_msgs.msg import OverrideRCIn, ManualControl
+from std_msgs.msg import Int16
 from sensor_msgs.msg import (
     FluidPressure as Pressure,
     Temperature,
@@ -53,6 +54,9 @@ class ROSBluerov2Interface(Node):
         self.magnetic_field_pub = self.create_publisher(
             MagneticField, "bluerov2/magnetic_field", 10
         )
+
+        # Create a publisher for the heading
+        self.heading_pub = self.create_publisher(Int16, "bluerov2/heading", 10)
 
         # Create a publisher for the IMU message
         self.imu_pub = self.create_publisher(Imu, "bluerov2/imu", 10)
@@ -193,8 +197,9 @@ class ROSBluerov2Interface(Node):
             f"VFR HUD: {msg.airspeed}, {msg.groundspeed}, {msg.heading}, {msg.throttle}, {msg.alt}"
         )
 
-        # TODO: Implement
-        pass
+        heading_msg = Int16()
+        heading_msg.data = msg.heading
+        self.heading_pub.publish(heading_msg)
 
     def manual_control_callback(self, msg):
         """
