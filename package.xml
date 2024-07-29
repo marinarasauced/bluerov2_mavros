@@ -19,6 +19,7 @@
   <depend>std_srvs</depend>
   <depend>python3-gi</depend>
 
+  <exec_depend>cv_bridge</exec_depend>
   <exec_depend>ros2launch</exec_depend>
 
 
