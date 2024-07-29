@@ -36,11 +36,11 @@ class BlueRov2CameraInterface(Node):
         )
         self.video_sink = self.get_parameter("video_sink").value
 
-        self.pipeline = Gst.parse_launch(
-            " ".join(
-                [self.video_src, self.video_codec, self.video_decode, self.video_sink]
-            )
+        pipeline_str = " ".join(
+            [self.video_src, self.video_codec, self.video_decode, self.video_sink]
         )
+        Gst.init(None)
+        self.pipeline = Gst.parse_launch(pipeline_str)
         self.pipeline.set_state(Gst.State.PLAYING)
 
         self.appsink = self.pipeline.get_by_name("appsink0")
@@ -63,7 +63,7 @@ class BlueRov2CameraInterface(Node):
         msg.data = info.data
         msg.width = caps_structure.get_value("width")
         msg.height = caps_structure.get_value("height")
-        msg.encoding = "rgb8"
+        msg.encoding = "bgr8"
         msg.step = msg.width * 3
         self.publisher.publish(msg)
 
