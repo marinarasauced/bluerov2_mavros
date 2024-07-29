@@ -17,6 +17,7 @@
   <depend>mavros_msgs</depend>
   <depend>sensor_msgs</depend>
   <depend>std_srvs</depend>
+  <depend>python3-gi</depend>
 
   <exec_depend>ros2launch</exec_depend>
 

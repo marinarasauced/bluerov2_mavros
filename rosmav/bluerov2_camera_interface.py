@@ -1,0 +1,90 @@
+#!/usr/bin/env python
+
+import rclpy
+from rclpy.node import Node
+from sensor_msgs.msg import Image
+import gi
+
+gi.require_version("Gst", "1.0")
+from gi.repository import Gst
+
+
+class BlueRov2CameraInterface(Node):
+    def __init__(self):
+        super().__init__("bluerov2_camera_interface")
+        self.declare_parameter(
+            "video_src",
+            "udpsrc port=5600",
+        )
+        self.video_src = self.get_parameter("video_src").value
+
+        self.declare_parameter(
+            "video_codec",
+            "! application/x-rtp, payload=96 ! rtph264depay ! h264parse ! avdec_h264",
+        )
+        self.video_codec = self.get_parameter("video_codec").value
+
+        self.declare_parameter(
+            "video_decode",
+            "! decodebin ! videoconvert ! video/x-raw,format=(string)BGR ! videoconvert",
+        )
+        self.video_decode = self.get_parameter("video_decode").value
+
+        self.declare_parameter(
+            "video_sink",
+            "! appsink emit-signals=true sync=false max-buffers=2 drop=true",
+        )
+        self.video_sink = self.get_parameter("video_sink").value
+
+        self.pipeline = Gst.parse_launch(
+            " ".join(
+                [self.video_src, self.video_codec, self.video_decode, self.video_sink]
+            )
+        )
+        self.pipeline.set_state(Gst.State.PLAYING)
+
+        self.appsink = self.pipeline.get_by_name("appsink0")
+        self.appsink.set_property("emit-signals", True)
+        self.appsink.connect("new-sample", self.on_new_sample)
+
+        self.publisher = self.create_publisher(Image, "bluerov2/camera", 10)
+
+    def on_new_sample(self, sink):
+        sample = sink.emit("pull-sample")
+        buffer = sample.get_buffer()
+        success, info = buffer.map(Gst.MapFlags.READ)
+        if not success:
+            self.get_logger().error("Could not map buffer")
+            return
+
+        caps_structure = sample.get_caps().get_structure(0)
+
+        msg = Image()
+        msg.data = info.data
+        msg.width = caps_structure.get_value("width")
+        msg.height = caps_structure.get_value("height")
+        msg.encoding = "rgb8"
+        msg.step = msg.width * 3
+        self.publisher.publish(msg)
+
+        buffer.unmap(info)
+        return Gst.FlowReturn.OK
+
+
+def main(args=None):
+    rclpy.init(args=args)
+
+    node = BlueRov2CameraInterface()
+
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+
+    node.pipeline.set_state(Gst.State.NULL)
+    node.destroy_node()
+    rclpy.try_shutdown()
+
+
+if __name__ == "__main__":
+    main()
