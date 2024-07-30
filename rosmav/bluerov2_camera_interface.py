@@ -12,6 +12,8 @@ from gi.repository import Gst
 
 
 class BlueRov2CameraInterface(Node):
+    frame_id = 0
+
     def __init__(self):
         super().__init__("bluerov2_camera_interface")
         self.declare_parameter(
@@ -39,6 +41,7 @@ class BlueRov2CameraInterface(Node):
         self.video_sink = self.get_parameter("video_sink").value
 
         self.cvb = CvBridge()
+        self.publisher = self.create_publisher(Image, "bluerov2/camera", 10)
 
         pipeline_str = " ".join(
             [self.video_src, self.video_codec, self.video_decode, self.video_sink]
@@ -51,10 +54,13 @@ class BlueRov2CameraInterface(Node):
         self.appsink.set_property("emit-signals", True)
         self.appsink.connect("new-sample", self.on_new_sample)
 
-        self.publisher = self.create_publisher(Image, "bluerov2/camera", 10)
+        self.get_logger().info(
+            "BlueRov2CameraInterface node has started. Waiting for images..."
+        )
 
     def on_new_sample(self, sink):
         sample = sink.emit("pull-sample")
+        self.get_logger().debug("Received new sample")
         buffer = sample.get_buffer()
         success, info = buffer.map(Gst.MapFlags.READ)
         if not success:
@@ -62,6 +68,9 @@ class BlueRov2CameraInterface(Node):
             return
 
         caps_structure = sample.get_caps().get_structure(0)
+        self.get_logger().debug(
+            f"Received image with size: {caps_structure.get_value('width')} x {caps_structure.get_value('height')}"
+        )
 
         np_image = np.ndarray(
             (caps_structure.get_value("height"), caps_structure.get_value("width"), 3),
@@ -71,8 +80,12 @@ class BlueRov2CameraInterface(Node):
 
         msg = self.cvb.cv2_to_imgmsg(np_image, encoding="bgr8")
         msg.header.stamp = self.get_clock().now().to_msg()
+        msg.header.frame_id = str(self.frame_id)
         self.publisher.publish(msg)
 
+        self.get_logger().debug(f"Published image with frame_id: {self.frame_id}")
+
+        self.frame_id += 1
         buffer.unmap(info)
         return Gst.FlowReturn.OK
 
