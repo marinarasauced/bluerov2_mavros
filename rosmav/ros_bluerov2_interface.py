@@ -17,7 +17,7 @@ from sensor_msgs.msg import (
 class ROSBluerov2Interface(Node):
     _x = 0
     _y = 0
-    _z = 0
+    _z = 500
     _r = 0
     _buttons = 0
 
