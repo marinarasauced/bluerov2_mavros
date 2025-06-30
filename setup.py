@@ -1,7 +1,10 @@
 import os
 from glob import glob
 from setuptools import find_packages, setup
+import os
 
+home_path = os.path.expanduser("~")
+executable_path = os.path.join(home_path, '.virtualenvs', 'rosmav', 'bin', 'python')
 package_name = "rosmav"
 
 setup(
@@ -28,5 +31,10 @@ setup(
             "ros_bluerov2_interface = rosmav.ros_bluerov2_interface:main",
             "bluerov2_camera_interface = rosmav.bluerov2_camera_interface:main",
         ],
+    },
+    options={
+        'build_scripts': {
+            'executable': executable_path,
+        }
     },
 )
