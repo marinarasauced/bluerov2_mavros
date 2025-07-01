@@ -3,7 +3,9 @@ import rclpy
 from rclpy.node import Node
 from mavros_msgs.msg import ManualControl
 from std_msgs.msg import Float64
+
 import math
+import numpy as np
 
 
 class BlueROV2SimulationInterface(Node):
@@ -12,6 +14,13 @@ class BlueROV2SimulationInterface(Node):
     _z = 0
     _r = 0
     _buttons = 0
+    _theta = np.pi/4
+    _a = np.sin(_theta)
+    _A = np.array([
+        [-_a, _a, -_a, _a],
+        [-_a, -_a, _a, _a],
+        [-1, 1, -1, 1],
+    ])
 
     def __init__(self):
         super().__init__("bluerov2_software_interface")
@@ -58,13 +67,21 @@ class BlueROV2SimulationInterface(Node):
             value = max(min(value, 100.0), -100.0)
             return (value / 100.0) * (51.5 if value >= 0 else 40.2)
     
+        # thruster_outputs = [
+        #     self._x - self._r,
+        #     self._x + self._r,
+        #     self._y - self._r,
+        #     self._y + self._r,
+        #     -self._z,
+        #     -self._z,
+        # ]
+
+        _B = np.array([self._x, self._y, self._z])
+        _F = np.linalg.pinv(_A) @ _B
+
         thruster_outputs = [
-            self._x - self._r,
-            self._x + self._r,
-            self._y - self._r,
-            self._y + self._r,
-            -self._z,
-            -self._z,
+            _F[0], _F[1], _F[2], _F[3],
+            -self._z, -self._z
         ]
 
         for i in range(6):
