@@ -26,7 +26,7 @@ class BlueROV2SimulationInterface(Node):
         self.cmd_thrust_pubs = [
             self.create_publisher(
                 Float64,
-                f"thruster{i}/cmd_thrust",
+                f"thruster{i + 1}/cmd_thrust",
                 10
             )
             for i in range(6)
