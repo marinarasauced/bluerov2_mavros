@@ -3,6 +3,7 @@ import rclpy
 from rclpy.node import Node
 from mavros_msgs.msg import ManualControl
 from std_msgs.msg import Float64
+import math
 
 
 class BlueROV2SimulationInterface(Node):
@@ -44,10 +45,10 @@ class BlueROV2SimulationInterface(Node):
 
         See https://mavlink.io/en/messages/common.html#MANUAL_CONTROL
         """
-        self._x = msg.x if msg.x else self._x
-        self._y = msg.y if msg.y else self._y
-        self._z = msg.z if msg.z else self._z
-        self._r = msg.r if msg.r else self._r
+        self._x = msg.x if math.isnan(msg.x) else self._x
+        self._y = msg.y if math.isnan(msg.y) else self._y
+        self._z = msg.z if math.isnan(msg.z) else self._z
+        self._r = msg.r if math.isnan(msg.r) else self._r
 
         def scale_thrust(value: float) -> float:
             """
