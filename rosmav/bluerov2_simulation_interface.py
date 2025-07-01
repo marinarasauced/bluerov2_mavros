@@ -14,6 +14,8 @@ class BlueROV2SimulationInterface(Node):
     _z = 0
     _r = 0
     _buttons = 0
+
+    # Remap control input u=[x,y,z,r] to thrust contributions by motor
     _theta = np.pi/4
     _a = np.sin(_theta)
     _b = 1.0
