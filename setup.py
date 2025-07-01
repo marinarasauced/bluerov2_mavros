@@ -32,7 +32,7 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
-            "ros_bluerov2_interface = rosmav.ros_bluerov2_interface:main",
+            "bluerov2_general_interface = rosmav.bluerov2_general_interface:main",
             "bluerov2_camera_interface = rosmav.bluerov2_camera_interface:main",
         ],
     },

@@ -17,41 +17,41 @@
   gz_type_name: "gz.msgs.IMU"
   direction: GZ_TO_ROS
 
-# - ros_topic_name: "/rov1/thruster1/cmd_thrust"
-#   gz_topic_name: "/world/bluerov2_pool_sim/model/rov1/joint/thruster1_joint/cmd"
-#   ros_type_name: "std_msgs/msg/Float64"
-#   gz_type_name: "gz.msgs.Double"
-#   direction: ROS_TO_GZ
+- ros_topic_name: "/rov1/thruster1/cmd_thrust"
+  gz_topic_name: "/model/rov1/joint/thruster1_joint/cmd_thrust"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
 
-# - ros_topic_name: "/rov1/thruster2/cmd_thrust"
-#   gz_topic_name: "/world/bluerov2_pool_sim/model/rov1/joint/thruster1_joint/cmd"
-#   ros_type_name: "std_msgs/msg/Float64"
-#   gz_type_name: "gz.msgs.Double"
-#   direction: ROS_TO_GZ
+- ros_topic_name: "/rov1/thruster2/cmd_thrust"
+  gz_topic_name: "/model/rov1/joint/thruster2_joint/cmd_thrust"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
 
-# - ros_topic_name: "/rov1/thruster3/cmd_thrust"
-#   gz_topic_name: "/world/bluerov2_pool_sim/model/rov1/joint/thruster1_joint/cmd"
-#   ros_type_name: "std_msgs/msg/Float64"
-#   gz_type_name: "gz.msgs.Double"
-#   direction: ROS_TO_GZ
+- ros_topic_name: "/rov1/thruster3/cmd_thrust"
+  gz_topic_name: "/model/rov1/joint/thruster3_joint/cmd_thrust"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
 
-# - ros_topic_name: "/rov1/thruster4/cmd_thrust"
-#   gz_topic_name: "/world/bluerov2_pool_sim/model/rov1/joint/thruster1_joint/cmd"
-#   ros_type_name: "std_msgs/msg/Float64"
-#   gz_type_name: "gz.msgs.Double"
-#   direction: ROS_TO_GZ
+- ros_topic_name: "/rov1/thruster4/cmd_thrust"
+  gz_topic_name: "/model/rov1/joint/thruster4_joint/cmd_thrust"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
 
-# - ros_topic_name: "/rov1/thruster5/cmd_thrust"
-#   gz_topic_name: "/world/bluerov2_pool_sim/model/rov1/joint/thruster1_joint/cmd"
-#   ros_type_name: "std_msgs/msg/Float64"
-#   gz_type_name: "gz.msgs.Double"
-#   direction: ROS_TO_GZ
+- ros_topic_name: "/rov1/thruster5/cmd_thrust"
+  gz_topic_name: "/model/rov1/joint/thruster5_joint/cmd_thrust"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
 
-# - ros_topic_name: "/rov1/thruster6/cmd_thrust"
-#   gz_topic_name: "/world/bluerov2_pool_sim/model/rov1/joint/thruster1_joint/cmd"
-#   ros_type_name: "std_msgs/msg/Float64"
-#   gz_type_name: "gz.msgs.Double"
-#   direction: ROS_TO_GZ
+- ros_topic_name: "/rov1/thruster6/cmd_thrust"
+  gz_topic_name: "/model/rov1/joint/thruster6_joint/cmd_thrust"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
 
 - ros_topic_name: "/rov2/camera"
   gz_topic_name: "/world/bluerov2_pool_sim/model/rov2/link/base_link/sensor/camera_sensor/image"
@@ -71,38 +71,38 @@
   gz_type_name: "gz.msgs.IMU"
   direction: GZ_TO_ROS
 
-# - ros_topic_name: "/rov2/thruster1/cmd_thrust"
-#   gz_topic_name: "/world/bluerov2_pool_sim/model/rov2/joint/thruster1_joint/cmd"
-#   ros_type_name: "std_msgs/msg/Float64"
-#   gz_type_name: "gz.msgs.Double"
-#   direction: ROS_TO_GZ
+- ros_topic_name: "/rov2/thruster1/cmd_thrust"
+  gz_topic_name: "/model/rov2/joint/thruster1_joint/cmd_thrust"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
 
-# - ros_topic_name: "/rov2/thruster2/cmd_thrust"
-#   gz_topic_name: "/world/bluerov2_pool_sim/model/rov2/joint/thruster1_joint/cmd"
-#   ros_type_name: "std_msgs/msg/Float64"
-#   gz_type_name: "gz.msgs.Double"
-#   direction: ROS_TO_GZ
+- ros_topic_name: "/rov2/thruster2/cmd_thrust"
+  gz_topic_name: "/model/rov2/joint/thruster2_joint/cmd_thrust"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
 
-# - ros_topic_name: "/rov2/thruster3/cmd_thrust"
-#   gz_topic_name: "/world/bluerov2_pool_sim/model/rov2/joint/thruster1_joint/cmd"
-#   ros_type_name: "std_msgs/msg/Float64"
-#   gz_type_name: "gz.msgs.Double"
-#   direction: ROS_TO_GZ
+- ros_topic_name: "/rov2/thruster3/cmd_thrust"
+  gz_topic_name: "/model/rov2/joint/thruster3_joint/cmd_thrust"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
 
-# - ros_topic_name: "/rov2/thruster4/cmd_thrust"
-#   gz_topic_name: "/world/bluerov2_pool_sim/model/rov2/joint/thruster1_joint/cmd"
-#   ros_type_name: "std_msgs/msg/Float64"
-#   gz_type_name: "gz.msgs.Double"
-#   direction: ROS_TO_GZ
+- ros_topic_name: "/rov2/thruster4/cmd_thrust"
+  gz_topic_name: "/model/rov2/joint/thruster4_joint/cmd_thrust"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
 
-# - ros_topic_name: "/rov2/thruster5/cmd_thrust"
-#   gz_topic_name: "/world/bluerov2_pool_sim/model/rov2/joint/thruster1_joint/cmd"
-#   ros_type_name: "std_msgs/msg/Float64"
-#   gz_type_name: "gz.msgs.Double"
-#   direction: ROS_TO_GZ
+- ros_topic_name: "/rov2/thruster5/cmd_thrust"
+  gz_topic_name: "/model/rov2/joint/thruster5_joint/cmd_thrust"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
 
-# - ros_topic_name: "/rov2/thruster6/cmd_thrust"
-#   gz_topic_name: "/world/bluerov2_pool_sim/model/rov2/joint/thruster1_joint/cmd"
-#   ros_type_name: "std_msgs/msg/Float64"
-#   gz_type_name: "gz.msgs.Double"
-#   direction: ROS_TO_GZ
+- ros_topic_name: "/rov2/thruster6/cmd_thrust"
+  gz_topic_name: "/model/rov2/joint/thruster6_joint/cmd_thrust"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
