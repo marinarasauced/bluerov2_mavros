@@ -37,13 +37,25 @@ class BlueROV2SimulationInterface(Node):
         """
         Send manual control message
 
+        Input for each field can range from 100 to -100
+
+        Forward Thrust per motor: ~ +51.5 N
+        Reverse Thrust per motor: ~ -40.2 N
+
         See https://mavlink.io/en/messages/common.html#MANUAL_CONTROL
         """
-        self._x = int(msg.x * 10) if msg.x else self._x
-        self._y = int(msg.y * 10) if msg.y else self._y
-        # msg.z is between -100 and 100, but the MAVLink message expects a value between 0 and 1000
-        self._z = int((msg.z * 10) / 2 + 500) if msg.z else self._z
-        self._r = int(msg.r * 10) if msg.r else self._r
+        self._x = msg.x if msg.x else self._x
+        self._y = msg.y if msg.y else self._y
+        self._z = msg.z if msg.z else self._z
+        self._r = msg.r if msg.r else self._r
+
+        def scale_thrust(value: float) -> float:
+            """
+            Scale input in [-100, 100] to thrust in N.
+            Positive maps to [0, 51.5], negative maps to [0, -40.2]
+            """
+            value = max(min(value, 100.0), -100.0)
+            return (value / 100.0) * (51.5 if value >= 0 else 40.2)
     
         thruster_outputs = [
             self._x - self._r,
@@ -56,7 +68,7 @@ class BlueROV2SimulationInterface(Node):
 
         for i in range(6):
             cmd_thrust = Float64()
-            cmd_thrust.data = float(max(min(thruster_outputs[i], 1.0), -1.0))
+            cmd_thrust.data = scale_thrust(thruster_outputs[i])
             self.cmd_thrust_pubs[i].publish(cmd_thrust)
 
 
