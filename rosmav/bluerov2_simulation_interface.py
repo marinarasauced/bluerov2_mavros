@@ -39,23 +39,23 @@ class BlueROV2SimulationInterface(Node):
 
         See https://mavlink.io/en/messages/common.html#MANUAL_CONTROL
         """
-        self._x = int(msg.x * 10) if msg.x else self._x
-        self._y = int(msg.y * 10) if msg.y else self._y
-        self._z = int((msg.z * 10) / 2 + 500) if msg.z else self._z
-        self._r = int(msg.r * 10) if msg.r else self._r
+        self._x = msg.x / 1000.0 if msg.x else self._x  # Forward
+        self._y = msg.y / 1000.0 if msg.y else self._y  # Not used (no lateral thrusters)
+        self._z = msg.z / 1000.0 if msg.z else self._z  # Vertical
+        self._r = msg.r / 1000.0 if msg.r else self._r  # Yaw
     
         thruster_outputs = [
-            self._z,
-            self._z,
             self._x - self._r,
             self._x + self._r,
             self._y - self._r,
-            self._y + self._r
+            self._y + self._r,
+            self._z,
+            self._z,
         ]
 
         for i in range(6):
             cmd_thrust = Float64()
-            cmd_thrust.data = float(thruster_outputs[i])
+            cmd_thrust.data = float(max(min(thruster_outputs[i], 1.0), -1.0))
             self.cmd_thrust_pubs[i].publish(cmd_thrust)
 
 
