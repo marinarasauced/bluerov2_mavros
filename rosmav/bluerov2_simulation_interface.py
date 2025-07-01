@@ -17,8 +17,8 @@ class BlueROV2SimulationInterface(Node):
     _theta = np.pi/4
     _a = np.sin(_theta)
     _A = np.array([
-        [-_a, -_a, _a, _a],
-        [-_a, _a, -_a, _a],
+        [-1, -1, 1, 1],
+        [-1, 1, -1, 1],
         [-1, 1, 1, -1],
     ])
 
