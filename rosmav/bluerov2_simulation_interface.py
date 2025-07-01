@@ -5,7 +5,7 @@ from mavros_msgs.msg import ManualControl
 from std_msgs.msg import Float64
 
 
-class BlueROV2SimulationInterface():
+class BlueROV2SimulationInterface(Node):
     _x = 0
     _y = 0
     _z = 500
