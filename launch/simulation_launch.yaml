@@ -1,0 +1,19 @@
+launch:
+
+- node:
+    pkg: "rosmav"
+    exec: "ros_bluerov2_interface"
+    name: "bluerov2_interface"
+    namespace: "rov1"
+    param:
+    - name: "udp_params"
+      value: "udpin:0.0.0.0:9002"
+
+- node:
+    pkg: "rosmav"
+    exec: "ros_bluerov2_interface"
+    name: "bluerov2_interface"
+    namespace: "rov2"
+    param:
+    - name: "udp_params"
+      value: "udpin:0.0.0.0:9012"

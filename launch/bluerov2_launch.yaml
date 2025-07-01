@@ -5,3 +5,6 @@ launch:
     exec: "ros_bluerov2_interface"
     name: "bluerov2_interface"
     namespace: "bluerov2"
+    param:
+    - name: "udp_params"
+      value: "udpin:0.0.0.0:14550"
