@@ -8,7 +8,7 @@ from std_msgs.msg import Float64
 class BlueROV2SimulationInterface(Node):
     _x = 0
     _y = 0
-    _z = 500
+    _z = 0
     _r = 0
     _buttons = 0
 
@@ -55,7 +55,7 @@ class BlueROV2SimulationInterface(Node):
             Positive maps to [0, 51.5], negative maps to [0, -40.2]
             """
             value = max(min(value, 100.0), -100.0)
-            return (value / 100.0) * (51.5 if value >= 0 else 40.2)
+            return (value / 100.0) * (515.0 if value >= 0 else 402.0)
     
         thruster_outputs = [
             self._x - self._r,
