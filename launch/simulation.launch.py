@@ -9,7 +9,7 @@ def generate_launch_description():
             name="bluerov2_interface",
             namespace="rov1",
             parameters=[{
-                "udp_params": "udpin:0.0.0.0:9002"
+                "udp_params": "udpin:0.0.0.0:14550"
             }]
         ),
         Node(
@@ -18,7 +18,7 @@ def generate_launch_description():
             name="bluerov2_interface",
             namespace="rov2",
             parameters=[{
-                "udp_params": "udpin:0.0.0.0:9012"
+                "udp_params": "udpin:0.0.0.0:14560"
             }]
         )
     ])
