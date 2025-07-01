@@ -39,10 +39,11 @@ class BlueROV2SimulationInterface(Node):
 
         See https://mavlink.io/en/messages/common.html#MANUAL_CONTROL
         """
-        self._x = msg.x / 1000.0 if msg.x else self._x  # Forward
-        self._y = msg.y / 1000.0 if msg.y else self._y  # Not used (no lateral thrusters)
-        self._z = msg.z / 1000.0 if msg.z else self._z  # Vertical
-        self._r = msg.r / 1000.0 if msg.r else self._r  # Yaw
+        self._x = int(msg.x * 10) if msg.x else self._x
+        self._y = int(msg.y * 10) if msg.y else self._y
+        # msg.z is between -100 and 100, but the MAVLink message expects a value between 0 and 1000
+        self._z = int((msg.z * 10) / 2 + 500) if msg.z else self._z
+        self._r = int(msg.r * 10) if msg.r else self._r
     
         thruster_outputs = [
             self._x - self._r,
