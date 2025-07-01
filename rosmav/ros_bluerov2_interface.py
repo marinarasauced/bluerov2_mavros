@@ -43,13 +43,13 @@ class ROSBluerov2Interface(Node):
             SetBool, "arming", self.arming_callback
         )
 
-        # Create a subscriber to listen to the /bluerov2/override_rc topic
+        # Create a subscriber to listen to the override_rc topic
         self.override_rc_sub = self.create_subscription(
             OverrideRCIn, "override_rc", self.override_rc_callback, 10
         )
 
         # Create a publisher for the pressure message
-        self.pressure_pub = self.create_publisher(Pressure, "bluerov2/pressure", 10)
+        self.pressure_pub = self.create_publisher(Pressure, "pressure", 10)
 
         # Create a publisher for the temperature message
         self.temperature_pub = self.create_publisher(
@@ -67,7 +67,7 @@ class ROSBluerov2Interface(Node):
         # Create a publisher for the IMU message
         self.imu_pub = self.create_publisher(Imu, "imu", 10)
 
-        # Create a subscriber to listen to the /bluerov2/manual_control topic
+        # Create a subscriber to listen to the manual_control topic
         self.manual_control_sub = self.create_subscription(
             ManualControl, "manual_control", self.manual_control_callback, 10
         )
@@ -117,7 +117,7 @@ class ROSBluerov2Interface(Node):
 
     def override_rc_callback(self, msg: OverrideRCIn):
         """
-        Callback for the /bluerov2/override_rc subscriber
+        Callback for the override_rc subscriber
 
         See https://www.ardusub.com/developers/rc-input-and-output.html#rc-input
         """
