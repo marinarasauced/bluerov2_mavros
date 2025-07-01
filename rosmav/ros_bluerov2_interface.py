@@ -40,12 +40,12 @@ class ROSBluerov2Interface(Node):
 
         # Create arming/disarming service
         self.arming_service = self.create_service(
-            SetBool, "bluerov2/arming", self.arming_callback
+            SetBool, "arming", self.arming_callback
         )
 
         # Create a subscriber to listen to the /bluerov2/override_rc topic
         self.override_rc_sub = self.create_subscription(
-            OverrideRCIn, "bluerov2/override_rc", self.override_rc_callback, 10
+            OverrideRCIn, "override_rc", self.override_rc_callback, 10
         )
 
         # Create a publisher for the pressure message
@@ -53,23 +53,23 @@ class ROSBluerov2Interface(Node):
 
         # Create a publisher for the temperature message
         self.temperature_pub = self.create_publisher(
-            Temperature, "bluerov2/temperature", 10
+            Temperature, "temperature", 10
         )
 
         # Create a publisher for the magnetic field message
         self.magnetic_field_pub = self.create_publisher(
-            MagneticField, "bluerov2/magnetic_field", 10
+            MagneticField, "magnetic_field", 10
         )
 
         # Create a publisher for the heading
-        self.heading_pub = self.create_publisher(Int16, "bluerov2/heading", 10)
+        self.heading_pub = self.create_publisher(Int16, "heading", 10)
 
         # Create a publisher for the IMU message
-        self.imu_pub = self.create_publisher(Imu, "bluerov2/imu", 10)
+        self.imu_pub = self.create_publisher(Imu, "imu", 10)
 
         # Create a subscriber to listen to the /bluerov2/manual_control topic
         self.manual_control_sub = self.create_subscription(
-            ManualControl, "bluerov2/manual_control", self.manual_control_callback, 10
+            ManualControl, "manual_control", self.manual_control_callback, 10
         )
 
     def send_heartbeat(self):
