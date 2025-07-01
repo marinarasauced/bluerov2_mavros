@@ -55,7 +55,7 @@ class BlueROV2SimulationInterface(Node):
 
         for i in range(6):
             cmd_thrust = Float64()
-            cmd_thrust.data = max(min(thruster_outputs[i], 1.0), -1.0)
+            cmd_thrust.data = float(thruster_outputs[i])
             self.cmd_thrust_pubs[i].publish(cmd_thrust)
 
 
