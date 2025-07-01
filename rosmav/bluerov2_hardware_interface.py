@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 import rclpy
 from rclpy.node import Node
@@ -14,7 +13,7 @@ from sensor_msgs.msg import (
 )
 
 
-class ROSBluerov2Interface(Node):
+class BlueROV2HardwareInterface(Node):
     _x = 0
     _y = 0
     _z = 500
@@ -22,7 +21,7 @@ class ROSBluerov2Interface(Node):
     _buttons = 0
 
     def __init__(self):
-        super().__init__("ros_bluerov2_interface")
+        super().__init__("bluerov2_hardware_interface")
         self.declare_parameter("udp_params", "udpin:0.0.0.0:14550")
         self.udp_params = self.get_parameter("udp_params").value
 
@@ -232,7 +231,7 @@ class ROSBluerov2Interface(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = ROSBluerov2Interface()
+    node = BlueROV2HardwareInterface()
 
     try:
         rclpy.spin(node)

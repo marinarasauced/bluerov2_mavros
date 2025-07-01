@@ -17,7 +17,21 @@ def generate_launch_description():
             name='parameter_bridge',
             output='screen',
             parameters=[{'config_file': config_path}]
-        )
+        ),
+        Node(
+            package='rosmav',
+            executable='bluerov2_simulation_interface',
+            name='bluerov2_simulation_interface',
+            output='screen',
+            namespace='rov1'
+        ),
+        Node(
+            package='rosmav',
+            executable='bluerov2_simulation_interface',
+            name='bluerov2_simulation_interface',
+            output='screen',
+            namespace='rov2'
+        ),
     ])
 
 

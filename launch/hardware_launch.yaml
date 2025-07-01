@@ -2,8 +2,8 @@ launch:
 
 - node:
     pkg: "rosmav"
-    exec: "ros_bluerov2_interface"
-    name: "bluerov2_interface"
+    exec: "bluerov2_hardware_interface"
+    name: "bluerov2_hardware_interface"
     namespace: "bluerov2"
     param:
     - name: "udp_params"

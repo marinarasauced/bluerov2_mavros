@@ -16,6 +16,7 @@
   <depend>rclpy</depend>
   <depend>mavros_msgs</depend>
   <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
   <depend>std_srvs</depend>
   <depend>python3-gi</depend>
   <depend>gstreamer1.0-plugins-good</depend>
