@@ -16,10 +16,14 @@ class BlueROV2SimulationInterface(Node):
     _buttons = 0
     _theta = np.pi/4
     _a = np.sin(_theta)
+    _b = 1.0
     _A = np.array([
-        [-1, -1, 1, 1],
-        [-1, 1, -1, 1],
-        [-1, 1, 1, -1],
+        [-_a, -_a, 0, -_b],
+        [-_a, _a, 0, _b],
+        [_a, -_a, 0, _b],
+        [_a, _a, 0, -_b],
+        [0, 0, 1, 0],
+        [0, 0, 1, 0],
     ])
 
     def __init__(self):
@@ -67,17 +71,8 @@ class BlueROV2SimulationInterface(Node):
             value = max(min(value, 100.0), -100.0)
             return (value / 100.0) * (51.5 if value >= 0 else 40.2)
     
-        # thruster_outputs = [
-        #     self._x - self._r,
-        #     self._x + self._r,
-        #     self._y - self._r,
-        #     self._y + self._r,
-        #     -self._z,
-        #     -self._z,
-        # ]
-
-        _B = np.array([self._x, self._y, self._z])
-        _F = np.linalg.pinv(self._A) @ _B
+        _B = np.array([self._x, self._y, self._z, self._r])
+        _F = self._A @ _B
 
         thruster_outputs = [
             _F[0], _F[1], _F[2], _F[3],
