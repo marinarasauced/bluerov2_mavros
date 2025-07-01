@@ -77,7 +77,7 @@ class BlueROV2SimulationInterface(Node):
         # ]
 
         _B = np.array([self._x, self._y, self._z])
-        _F = np.linalg.pinv(_A) @ _B
+        _F = np.linalg.pinv(self._A) @ _B
 
         thruster_outputs = [
             _F[0], _F[1], _F[2], _F[3],
