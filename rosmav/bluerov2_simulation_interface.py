@@ -19,7 +19,7 @@ class BlueROV2SimulationInterface(Node):
     _A = np.array([
         [-_a, _a, -_a, _a],
         [-_a, -_a, _a, _a],
-        [-1, 1, -1, 1],
+        [-1, 1, 1, -1],
     ])
 
     def __init__(self):
