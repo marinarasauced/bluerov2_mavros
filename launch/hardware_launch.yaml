@@ -1,0 +1,10 @@
+launch:
+
+- node:
+    pkg: "rosmav"
+    exec: "bluerov2_hardware_interface"
+    name: "bluerov2_hardware_interface"
+    namespace: "bluerov2"
+    param:
+    - name: "udp_params"
+      value: "udpin:0.0.0.0:14550"

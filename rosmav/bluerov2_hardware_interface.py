@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 import rclpy
 from rclpy.node import Node
@@ -14,7 +13,7 @@ from sensor_msgs.msg import (
 )
 
 
-class ROSBluerov2Interface(Node):
+class BlueROV2HardwareInterface(Node):
     _x = 0
     _y = 0
     _z = 500
@@ -22,7 +21,7 @@ class ROSBluerov2Interface(Node):
     _buttons = 0
 
     def __init__(self):
-        super().__init__("ros_bluerov2_interface")
+        super().__init__("bluerov2_hardware_interface")
         self.declare_parameter("udp_params", "udpin:0.0.0.0:14550")
         self.udp_params = self.get_parameter("udp_params").value
 
@@ -40,36 +39,36 @@ class ROSBluerov2Interface(Node):
 
         # Create arming/disarming service
         self.arming_service = self.create_service(
-            SetBool, "bluerov2/arming", self.arming_callback
+            SetBool, "arming", self.arming_callback
         )
 
-        # Create a subscriber to listen to the /bluerov2/override_rc topic
+        # Create a subscriber to listen to the override_rc topic
         self.override_rc_sub = self.create_subscription(
-            OverrideRCIn, "bluerov2/override_rc", self.override_rc_callback, 10
+            OverrideRCIn, "override_rc", self.override_rc_callback, 10
         )
 
         # Create a publisher for the pressure message
-        self.pressure_pub = self.create_publisher(Pressure, "bluerov2/pressure", 10)
+        self.pressure_pub = self.create_publisher(Pressure, "pressure", 10)
 
         # Create a publisher for the temperature message
         self.temperature_pub = self.create_publisher(
-            Temperature, "bluerov2/temperature", 10
+            Temperature, "temperature", 10
         )
 
         # Create a publisher for the magnetic field message
         self.magnetic_field_pub = self.create_publisher(
-            MagneticField, "bluerov2/magnetic_field", 10
+            MagneticField, "magnetic_field", 10
         )
 
         # Create a publisher for the heading
-        self.heading_pub = self.create_publisher(Int16, "bluerov2/heading", 10)
+        self.heading_pub = self.create_publisher(Int16, "heading", 10)
 
         # Create a publisher for the IMU message
-        self.imu_pub = self.create_publisher(Imu, "bluerov2/imu", 10)
+        self.imu_pub = self.create_publisher(Imu, "imu", 10)
 
-        # Create a subscriber to listen to the /bluerov2/manual_control topic
+        # Create a subscriber to listen to the manual_control topic
         self.manual_control_sub = self.create_subscription(
-            ManualControl, "bluerov2/manual_control", self.manual_control_callback, 10
+            ManualControl, "manual_control", self.manual_control_callback, 10
         )
 
     def send_heartbeat(self):
@@ -117,7 +116,7 @@ class ROSBluerov2Interface(Node):
 
     def override_rc_callback(self, msg: OverrideRCIn):
         """
-        Callback for the /bluerov2/override_rc subscriber
+        Callback for the override_rc subscriber
 
         See https://www.ardusub.com/developers/rc-input-and-output.html#rc-input
         """
@@ -232,7 +231,7 @@ class ROSBluerov2Interface(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = ROSBluerov2Interface()
+    node = BlueROV2HardwareInterface()
 
     try:
         rclpy.spin(node)

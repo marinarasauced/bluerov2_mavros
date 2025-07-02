@@ -1,7 +1,10 @@
 import os
 from glob import glob
 from setuptools import find_packages, setup
+import os
 
+home_path = os.path.expanduser("~")
+executable_path = os.path.join(home_path, '.virtualenvs', 'rosmav', 'bin', 'python')
 package_name = "rosmav"
 
 setup(
@@ -15,6 +18,10 @@ setup(
             os.path.join("share", package_name, "launch"),
             glob(os.path.join("launch", "*launch.[pxy][yma]*")),
         ),
+        (
+            os.path.join("share", package_name, "config"),
+            glob(os.path.join("config", "*.[pxy][yma]*")),
+        ),
     ],
     install_requires=["setuptools"],
     zip_safe=True,
@@ -25,8 +32,14 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
-            "ros_bluerov2_interface = rosmav.ros_bluerov2_interface:main",
+            "bluerov2_hardware_interface = rosmav.bluerov2_hardware_interface:main",
             "bluerov2_camera_interface = rosmav.bluerov2_camera_interface:main",
+            "bluerov2_simulation_interface = rosmav.bluerov2_simulation_interface:main",
         ],
+    },
+    options={
+        'build_scripts': {
+            'executable': executable_path,
+        }
     },
 )

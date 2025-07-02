@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 import rclpy
 from rclpy.node import Node
@@ -11,7 +10,7 @@ gi.require_version("Gst", "1.0")
 from gi.repository import Gst
 
 
-class BlueRov2CameraInterface(Node):
+class BlueROV2CameraInterface(Node):
     frame_id = 0
 
     def __init__(self):
