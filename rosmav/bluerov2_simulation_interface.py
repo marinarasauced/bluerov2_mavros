@@ -2,7 +2,8 @@
 import rclpy
 from rclpy.node import Node
 from mavros_msgs.msg import ManualControl
-from std_msgs.msg import Float64
+from std_msgs.msg import Float64, Int16
+from sensor_msgs.msg import MagneticField
 
 import math
 import numpy as np
@@ -36,7 +37,8 @@ class BlueROV2SimulationInterface(Node):
             ManualControl,
             "manual_control",
             self.manual_control_callback,
-        10)
+            10
+        )
 
         # Create publishers for Gazebo ROS 2 bridge motor topics
         self.cmd_thrust_pubs = [
@@ -47,6 +49,14 @@ class BlueROV2SimulationInterface(Node):
             )
             for i in range(6)
         ]
+
+        self.magnetic_field_sub = self.create_subscription(
+            MagneticField,
+            "magnetic_field",
+            self.magnetic_field_callback,
+            10
+        )
+        self.heading_pub = self.create_publisher(Int16, "heading", 10)
     
 
     def manual_control_callback(self, msg: ManualControl):
@@ -85,6 +95,23 @@ class BlueROV2SimulationInterface(Node):
             cmd_thrust = Float64()
             cmd_thrust.data = scale_thrust(thruster_outputs[i])
             self.cmd_thrust_pubs[i].publish(cmd_thrust)
+
+
+    def magnetic_field_callback(self, msg: MagneticField):
+        """
+        Subscribes to Magnetic Field from sim and republishes heading
+        """
+        mag_x = msg.magnetic_field.x
+        mag_y = msg.magnetic_field.y
+
+        heading_rad = math.atan2(mag_y, mag_x)
+        heading_deg = math.degrees(heading_rad)
+        if heading_deg < 0:
+            heading_deg += 360
+
+        heading_msg = Int16()
+        heading_msg.data = int(heading_deg)
+        self.heading_pub.publish(heading_msg)
 
 
 def main(args=None):

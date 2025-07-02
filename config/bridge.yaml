@@ -5,7 +5,7 @@
   gz_type_name: "gz.msgs.Image"
   direction: GZ_TO_ROS
 
-- ros_topic_name: "/rov1/magnetometer"
+- ros_topic_name: "/rov1/magnetic_field"
   gz_topic_name: "/world/bluerov2_pool_sim/model/rov1/link/base_link/sensor/compass_sensor/magnetometer"
   ros_type_name: "sensor_msgs/msg/MagneticField"
   gz_type_name: "gz.msgs.Magnetometer"
@@ -15,6 +15,12 @@
   gz_topic_name: "/world/bluerov2_pool_sim/model/rov1/link/base_link/sensor/imu_sensor/imu"
   ros_type_name: "sensor_msgs/msg/Imu"
   gz_type_name: "gz.msgs.IMU"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/rov1/pressure"
+  gz_topic_name: "/world/bluerov2_pool_sim/model/rov1/link/base_link/sensor/pressure_sensor/pressure"
+  ros_type_name: "sensor_msgs/msg/FluidPressure"
+  gz_type_name: "gz.msgs.FluidPressure"
   direction: GZ_TO_ROS
 
 - ros_topic_name: "/rov1/thruster1/cmd_thrust"
@@ -60,7 +66,7 @@
   direction: GZ_TO_ROS
 
 - ros_topic_name: "/rov2/magnetometer"
-  gz_topic_name: "/world/bluerov2_pool_sim/model/rov2/link/base_link/sensor/compass_sensor/magnetometer"
+  gz_topic_name: "/world/bluerov2_pool_sim/model/rov2/link/base_link/sensor/compass_sensor/magnetic_field"
   ros_type_name: "sensor_msgs/msg/MagneticField"
   gz_type_name: "gz.msgs.Magnetometer"
   direction: GZ_TO_ROS
@@ -69,6 +75,12 @@
   gz_topic_name: "/world/bluerov2_pool_sim/model/rov2/link/base_link/sensor/imu_sensor/imu"
   ros_type_name: "sensor_msgs/msg/Imu"
   gz_type_name: "gz.msgs.IMU"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/rov1/pressure"
+  gz_topic_name: "/world/bluerov2_pool_sim/model/rov2/link/base_link/sensor/pressure_sensor/pressure"
+  ros_type_name: "sensor_msgs/msg/FluidPressure"
+  gz_type_name: "gz.msgs.FluidPressure"
   direction: GZ_TO_ROS
 
 - ros_topic_name: "/rov2/thruster1/cmd_thrust"
