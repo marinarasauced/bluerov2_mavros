@@ -10,6 +10,7 @@ from sensor_msgs.msg import (
     Temperature,
     MagneticField,
     Imu,
+    BatteryState,
 )
 
 
@@ -66,6 +67,9 @@ class BlueROV2HardwareInterface(Node):
         # Create a publisher for the IMU message
         self.imu_pub = self.create_publisher(Imu, "imu", 10)
 
+        # Create a publisher for the Battery State
+        self.battery_pub = self.create_publisher(BatteryState, "battery_state", 10)
+
         # Create a subscriber to listen to the manual_control topic
         self.manual_control_sub = self.create_subscription(
             ManualControl, "manual_control", self.manual_control_callback, 10
@@ -113,6 +117,8 @@ class BlueROV2HardwareInterface(Node):
                 self._handle_imu(msg)
             elif msg.get_type() == "VFR_HUD":
                 self._handle_vfr_hud(msg)
+            elif msg.get_type() == "BATTERY_STATUS":
+                self._handle_battery_status(msg)
 
     def override_rc_callback(self, msg: OverrideRCIn):
         """
@@ -205,6 +211,27 @@ class BlueROV2HardwareInterface(Node):
         heading_msg = Int16()
         heading_msg.data = msg.heading
         self.heading_pub.publish(heading_msg)
+
+    def _handle_battery_status(self, msg):
+        """
+        Handle the BATTERY_STATUS MAVLink message
+        """
+        self.get_logger().debug(
+            f"Battery: voltages={msg.voltages}, current_battery={msg.current_battery}"
+        )
+
+        battery_msg = BatteryState()
+        battery_msg.header.stamp = self.get_clock().now().to_msg()
+
+        if msg.voltages[0] != 0xFFFF:
+            battery_msg.voltage = msg.voltages[0] / 1000.0
+
+        if msg.current_battery != -1:
+            battery_msg.current = msg.current_battery / 100.0
+
+        battery_msg.percentage = msg.battery_remaining / 100.0 if msg.battery_remaining != -1 else None
+
+        self.battery_pub.publish(battery_msg)
 
     def manual_control_callback(self, msg: ManualControl):
         """
