@@ -77,7 +77,7 @@
   gz_type_name: "gz.msgs.IMU"
   direction: GZ_TO_ROS
 
-- ros_topic_name: "/rov1/pressure"
+- ros_topic_name: "/rov2/pressure"
   gz_topic_name: "/world/bluerov2_pool_sim/model/rov2/link/base_link/sensor/pressure_sensor/pressure"
   ros_type_name: "sensor_msgs/msg/FluidPressure"
   gz_type_name: "gz.msgs.FluidPressure"
