@@ -1,4 +1,3 @@
-
 import rclpy
 from rclpy.node import Node
 from std_srvs.srv import SetBool
@@ -52,9 +51,7 @@ class BlueROV2HardwareInterface(Node):
         self.pressure_pub = self.create_publisher(Pressure, "pressure", 10)
 
         # Create a publisher for the temperature message
-        self.temperature_pub = self.create_publisher(
-            Temperature, "temperature", 10
-        )
+        self.temperature_pub = self.create_publisher(Temperature, "temperature", 10)
 
         # Create a publisher for the magnetic field message
         self.magnetic_field_pub = self.create_publisher(
@@ -229,7 +226,7 @@ class BlueROV2HardwareInterface(Node):
         if msg.current_battery != -1:
             battery_msg.current = msg.current_battery / 100.0
 
-        battery_msg.percentage = msg.battery_remaining / 100.0 if msg.battery_remaining != -1 else None
+        # battery_msg.percentage = msg.battery_remaining / 100.0 if msg.battery_remaining != -1 else None
 
         self.battery_pub.publish(battery_msg)
 
