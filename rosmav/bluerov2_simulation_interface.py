@@ -21,16 +21,22 @@ class BlueROV2SimulationInterface(Node):
     _a = np.sin(_theta)
     _b = 1.0
     _A = np.array([
-        [-_a, -_a, 0, -_b],
         [-_a, _a, 0, _b],
-        [_a, -_a, 0, _b],
+        [-_a, -_a, 0, -_b],
         [_a, _a, 0, -_b],
+        [_a, -_a, 0, _b],
         [0, 0, 1, 0],
         [0, 0, 1, 0],
     ])
 
     def __init__(self):
         super().__init__("bluerov2_software_interface")
+
+        self.declare_parameter("thrust_min", 40.2)
+        self.declare_parameter("thrust_max", 51.5)
+
+        self.thrust_min = self.get_parameter("thurst_min").value
+        self.thrust_max = self.get_parameter("thrust_min").value # ignore thrust_max
 
         # Create subscription for user-defined ManualControl messages
         self.manual_control_sub = self.create_subscription(
@@ -65,15 +71,15 @@ class BlueROV2SimulationInterface(Node):
 
         Input for each field can range from 100 to -100
 
-        Forward Thrust per motor: ~ +51.5 N
-        Reverse Thrust per motor: ~ -40.2 N
+        Forward Thrust per motor: ~ +{self.thrust_max} N
+        Reverse Thrust per motor: ~ -{self.thrust_min} N
 
         See https://mavlink.io/en/messages/common.html#MANUAL_CONTROL
         """
-        self._x = msg.x if not math.isnan(msg.x) else self._x
-        self._y = msg.y if not math.isnan(msg.y) else self._y
-        self._z = msg.z if not math.isnan(msg.z) else self._z
-        self._r = msg.r if not math.isnan(msg.r) else self._r
+        self._x = msg.x if msg.x else self._x
+        self._y = msg.y if msg.y else self._y
+        self._z = msg.z if msg.z else self._z
+        self._r = msg.r if msg.r else self._r
 
         def scale_thrust(value: float) -> float:
             """
@@ -81,7 +87,7 @@ class BlueROV2SimulationInterface(Node):
             Positive maps to [0, 51.5], negative maps to [0, -40.2]
             """
             value = max(min(value, 100.0), -100.0)
-            return (value / 100.0) * (51.5 if value >= 0 else 40.2)
+            return (value / 100.0) * (self.thrust_max if value >= 0 else self.thrust_min)
     
         _B = np.array([self._x, self._y, self._z, self._r])
         _F = self._A @ _B
