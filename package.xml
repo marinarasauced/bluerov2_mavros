@@ -19,6 +19,7 @@
   <depend>std_msgs</depend>
   <depend>std_srvs</depend>
   <depend>python3-gi</depend>
+  <depend>pyhthon3-gst-1.0</depend>
   <depend>gstreamer1.0-plugins-good</depend>
   <depend>gstreamer1.0-plugins-bad</depend>
   <depend>gstreamer1.0-libav</depend>

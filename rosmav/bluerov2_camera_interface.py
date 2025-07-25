@@ -40,7 +40,7 @@ class BlueROV2CameraInterface(Node):
         self.video_sink = self.get_parameter("video_sink").value
 
         self.cvb = CvBridge()
-        self.publisher = self.create_publisher(Image, "bluerov2/camera", 10)
+        self.publisher = self.create_publisher(Image, "camera", 10)
 
         pipeline_str = " ".join(
             [self.video_src, self.video_codec, self.video_decode, self.video_sink]
@@ -92,7 +92,7 @@ class BlueROV2CameraInterface(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    node = BlueRov2CameraInterface()
+    node = BlueROV2CameraInterface()
 
     try:
         rclpy.spin(node)
